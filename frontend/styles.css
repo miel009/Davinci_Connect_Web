@@ -13,7 +13,7 @@ body, html {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 30px; /* reducido */
+  padding: 15px 30px;
   background: rgba(10, 10, 10, 0.9);
   position: fixed;
   width: 100%;
@@ -71,20 +71,132 @@ nav ul li a:hover {
   color: #a445ff;
 }
 
-/* HERO */
+/* HERO espectacular: burbujas pequeñas y más negro */
 .hero {
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: center; /* centrado */
-  flex-wrap: wrap; /* para pantallas pequeñas */
+  justify-content: center;
+  flex-wrap: wrap;
   padding: 80px 30px 60px;
   min-height: 100vh;
-  background: linear-gradient(135deg, #0a0a0a, #1c0033);
   text-align: center;
+  overflow: hidden;
+  background: #0a0a0a;
+}
+
+.hero::before,
+.hero::after,
+.hero .bubble1,
+.hero .bubble2,
+.hero .bubble3 {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  z-index: 0;
+}
+
+.hero::before {
+  width: 80%;
+  height: 80%;
+  top: -10%;
+  left: -10%;
+  background: radial-gradient(circle at 40% 40%, rgba(164,69,255,0.15), rgba(0,0,0,0.98) 85%);
+  animation: moveBubble1 12s infinite ease-in-out, shake1 3s infinite alternate;
+}
+
+.hero::after {
+  width: 90%;
+  height: 90%;
+  top: -20%;
+  left: -20%;
+  background: radial-gradient(circle at 60% 60%, rgba(164,69,255,0.1), rgba(0,0,0,0.99) 85%);
+  animation: moveBubble2 18s infinite ease-in-out, shake2 4s infinite alternate;
+}
+
+.hero .bubble1 {
+  width: 60%;
+  height: 60%;
+  top: -10%;
+  left: 10%;
+  background: radial-gradient(circle at 50% 50%, rgba(164,69,255,0.08), rgba(0,0,0,0.97) 90%);
+  animation: moveBubble3 20s infinite ease-in-out, shake3 5s infinite alternate;
+}
+
+.hero .bubble2 {
+  width: 50%;
+  height: 50%;
+  top: 0%;
+  left: 30%;
+  background: radial-gradient(circle at 50% 50%, rgba(164,69,255,0.05), rgba(0,0,0,0.96) 90%);
+  animation: moveBubble4 22s infinite ease-in-out, shake4 6s infinite alternate;
+}
+
+.hero .bubble3 {
+  width: 70%;
+  height: 70%;
+  top: 10%;
+  left: -20%;
+  background: radial-gradient(circle at 50% 50%, rgba(164,69,255,0.1), rgba(0,0,0,0.98) 90%);
+  animation: moveBubble5 25s infinite ease-in-out, shake5 7s infinite alternate;
+}
+
+/* Animaciones de burbujas fluidas */
+@keyframes moveBubble1 {
+  0% { transform: translate(0,0) scale(1); }
+  25% { transform: translate(20%, -10%) scale(1.05); }
+  50% { transform: translate(-15%, 20%) scale(0.95); }
+  75% { transform: translate(10%, -15%) scale(1.02); }
+  100% { transform: translate(0,0) scale(1); }
+}
+
+@keyframes moveBubble2 {
+  0% { transform: translate(0,0) scale(1); }
+  25% { transform: translate(-25%, 15%) scale(1.1); }
+  50% { transform: translate(20%, -20%) scale(0.9); }
+  75% { transform: translate(-10%, 10%) scale(1.05); }
+  100% { transform: translate(0,0) scale(1); }
+}
+
+@keyframes moveBubble3 {
+  0% { transform: translate(0,0) scale(1); }
+  25% { transform: translate(15%, -25%) scale(1.08); }
+  50% { transform: translate(-20%, 20%) scale(0.95); }
+  75% { transform: translate(10%, -15%) scale(1.03); }
+  100% { transform: translate(0,0) scale(1); }
+}
+
+@keyframes moveBubble4 {
+  0% { transform: translate(0,0) scale(1); }
+  25% { transform: translate(-10%, 15%) scale(1.05); }
+  50% { transform: translate(15%, -20%) scale(0.95); }
+  75% { transform: translate(-5%, 10%) scale(1.02); }
+  100% { transform: translate(0,0) scale(1); }
+}
+
+@keyframes moveBubble5 {
+  0% { transform: translate(0,0) scale(1); }
+  25% { transform: translate(20%, -15%) scale(1.08); }
+  50% { transform: translate(-15%, 20%) scale(0.95); }
+  75% { transform: translate(10%, -10%) scale(1.03); }
+  100% { transform: translate(0,0) scale(1); }
+}
+
+/* Animaciones de movimientos repentinos */
+@keyframes shake1 { 0% { transform: translate(0,0); } 50% { transform: translate(3%, -3%) rotate(1deg);} 100% { transform: translate(0,0); } }
+@keyframes shake2 { 0% { transform: translate(0,0); } 50% { transform: translate(-2%,2%) rotate(-1deg);} 100% { transform: translate(0,0); } }
+@keyframes shake3 { 0% { transform: translate(0,0); } 50% { transform: translate(2%,-2%) rotate(1deg);} 100% { transform: translate(0,0); } }
+@keyframes shake4 { 0% { transform: translate(0,0); } 50% { transform: translate(-1%,1%) rotate(-1deg);} 100% { transform: translate(0,0); } }
+@keyframes shake5 { 0% { transform: translate(0,0); } 50% { transform: translate(1%,-1%) rotate(1deg);} 100% { transform: translate(0,0); } }
+
+/* Mantener hero-text y hero-img por encima de burbujas */
+.hero-text, .hero-img {
+  position: relative;
+  z-index: 1;
 }
 
 .hero-text {
-  max-width: 600px; /* ancho limitado */
+  max-width: 600px;
   width: 100%;
   animation: fadeInLeft 1.2s ease;
   margin-bottom: 40px;
@@ -134,6 +246,15 @@ nav ul li a:hover {
 section {
   padding: 100px 30px;
   text-align: center;
+  background: linear-gradient(135deg, rgba(164,69,255,0.05), #0a0a0a, rgba(164,69,255,0.05));
+  background-size: 400% 400%;
+  animation: sectionGradient 15s ease infinite;
+}
+
+@keyframes sectionGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .features h2,
@@ -152,7 +273,7 @@ section {
 }
 
 .card {
-  background: rgba(255, 255, 255, 0.05);
+  background: linear-gradient(135deg, rgba(164,69,255,0.3), rgba(0,0,0,0.05));
   padding: 30px;
   border-radius: 15px;
   transition: transform 0.3s, box-shadow 0.3s;
@@ -160,7 +281,7 @@ section {
 
 .card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 0 20px rgba(164, 69, 255, 0.4);
+  box-shadow: 0 0 25px rgba(164, 69, 255, 0.5);
 }
 
 .card img {
@@ -198,7 +319,7 @@ section {
 }
 
 .download .buttons a {
-  flex: 1 1 200px; /* ancho mínimo */
+  flex: 1 1 200px;
   max-width: 220px;
 }
 
