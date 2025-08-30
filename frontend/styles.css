@@ -56,11 +56,11 @@ nav ul li a:hover { color: #a445ff; }
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   flex-wrap: wrap;
   padding: 0px 10px 10px;
   min-height: 10vh;
-  text-align: center;
+  text-align:center;
   overflow: hidden;
   background: linear-gradient(-45deg, #120a1a, #0a0613, #1f013b, #000000);
   background-size: 400% 400%;
