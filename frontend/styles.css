@@ -58,8 +58,8 @@ nav ul li a:hover { color: #a445ff; }
   align-items: center;
   justify-content: space-around;
   flex-wrap: wrap;
-  padding: 0px 10px 10px;
-  min-height: 10vh;
+  padding: 0px;
+  min-height: 0vh;
   text-align:center;
   overflow: hidden;
   background: linear-gradient(-45deg, #120a1a, #0a0613, #1f013b, #000000);
@@ -125,7 +125,7 @@ nav ul li a:hover { color: #a445ff; }
 
 /* Hero content */
 .hero-text, .hero-img { position: relative; z-index: 1; }
-.hero-text { max-width: 600px; animation: fadeInLeft 1.2s ease; margin-bottom: 60px; }
+.hero-text { max-width: 600px; animation: fadeInLeft 1.2s ease; margin-bottom: 60px; position: relative; top: 40px; }
 .logo-hero { width: 400px; margin-bottom: -40px; animation: fadeInLeft 1.2s ease; }
 .hero-text h1 { font-size: 3rem; margin-bottom: 50px; color: #a445ff; }
 .hero-text p { font-size: 1.8rem; margin-bottom: 60px; }
@@ -140,7 +140,56 @@ nav ul li a:hover { color: #a445ff; }
   font-weight: 600;
   transition: transform 0.3s, box-shadow 0.3s;
 }
-.hero-img img { width: 200%; max-width: 600px; animation: float 4s ease-in-out infinite; margin: 0 auto; margin-top: 50px; }
+.hero-img {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-img img {
+  width: 200%;
+  max-width: 620px; /* la hice un poco más grande */
+  animation: float 4s ease-in-out infinite;
+  position: relative;
+  top: 20px; /* sube SOLO la imagen, no el contenido */
+  z-index: 2;
+  filter: drop-shadow(0px 25px 35px rgba(0,0,0,0.85)); /* sombra más intensa */
+}
+
+/* sombra elíptica ajustada */
+.hero-img::after {
+  content: "";
+  position: absolute;
+  bottom: 60px; /* sube la sombra también */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 340px;        /* más ancha */
+  height: 60px;        /* más grande */
+  background: rgba(0, 0, 0, 0.9);
+  border-radius: 50%;
+  filter: blur(6px);   /* menos difusa = más visible */
+  animation: shadowFloat 4s ease-in-out infinite;
+  z-index: 1;
+}
+
+/* Animación de flotación de la imagen */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+/* Animación de la sombra */
+@keyframes shadowFloat {
+  0%, 100% {
+    transform: translateX(-50%) scaleX(1.1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateX(-50%) scaleX(0.7);
+    opacity: 0.25;
+  }
+}
 
 /* SECCIONES */
 section {
@@ -186,7 +235,7 @@ section {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 45px;
-  max-width: 1500px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -205,8 +254,9 @@ section {
 }
 
 .benefits .card img {
-  width: 100px;
-  height: 100px;
+  width: 300px;
+  height: 200px;
+  border-radius: 20px;
   object-fit: contain;
   margin-bottom: 15px;
 }
