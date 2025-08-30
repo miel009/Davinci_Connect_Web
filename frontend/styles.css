@@ -101,7 +101,7 @@ nav ul li a:hover { color: #a445ff; }
   animation: waveMove 35s infinite linear;
 }
 
-/* Burbujas de distintos tamaños y colores */
+/* Burbujas */
 .hero .bubble {
   position: absolute;
   border-radius: 50%;
@@ -111,60 +111,28 @@ nav ul li a:hover { color: #a445ff; }
   animation: float 12s infinite ease-in-out;
 }
 
-/* Burbujas más grandes y nuevas burbujas añadidas */
-.hero .bubble:nth-child(1) { width: 60px; height: 60px; top: 20%; left: 10%; animation-duration: 14s; }
-.hero .bubble:nth-child(2) { width: 90px; height: 90px; top: 50%; left: 40%; animation-duration: 20s; }
-.hero .bubble:nth-child(3) { width: 120px; height: 120px; top: 70%; left: 80%; animation-duration: 25s; }
-.hero .bubble:nth-child(4) { width: 80px; height: 80px; top: 30%; left: 70%; animation-duration: 22s; }
-.hero .bubble:nth-child(5) { width: 100px; height: 100px; top: 60%; left: 20%; animation-duration: 28s; }
-.hero .bubble:nth-child(6) { width: 70px; height: 70px; top: 10%; left: 50%; animation-duration: 18s; }
-.hero .bubble:nth-child(7) { width: 50px; height: 50px; top: 80%; left: 30%; animation-duration: 24s; }
-.hero .bubble:nth-child(8) { width: 90px; height: 90px; top: 40%; left: 60%; animation-duration: 26s; }
-
 /* Animaciones */
 @keyframes float {
   0% { transform: translateY(0) translateX(0); opacity: 0.6; }
   50% { transform: translateY(-60px) translateX(30px); opacity: 1; }
   100% { transform: translateY(0) translateX(0); opacity: 0.6; }
 }
-
 @keyframes waveMove {
   0% { transform: translateX(0) rotate(0deg); }
   50% { transform: translateX(50%) rotate(5deg); }
   100% { transform: translateX(0) rotate(0deg); }
 }
 
-/* Mantener hero-text y hero-img por encima de ondas y burbujas */
+/* Hero content */
 .hero-text, .hero-img { position: relative; z-index: 1; }
-
-.hero-text {
-  max-width: 600px;
-  width: 100%;
-  animation: fadeInLeft 1.2s ease;
-  margin-bottom: 60px; /* antes 40px, más espacio */
-}
-
-.logo-hero {
-  width: 400px;
-  margin-bottom: -40px; /* antes 20px */
-  animation: fadeInLeft 1.2s ease;
-}
-
-.hero-text h1 {
-  font-size: 3rem;
-  margin-bottom: 50px; /* antes 20px */
-  color: #a445ff;
-}
-
-.hero-text p {
-  font-size: 1.8rem;
-  margin-bottom: 60px; /* antes 30px */
-}
-
+.hero-text { max-width: 600px; animation: fadeInLeft 1.2s ease; margin-bottom: 60px; }
+.logo-hero { width: 400px; margin-bottom: -40px; animation: fadeInLeft 1.2s ease; }
+.hero-text h1 { font-size: 3rem; margin-bottom: 50px; color: #a445ff; }
+.hero-text p { font-size: 1.8rem; margin-bottom: 60px; }
 .btn {
   display: inline-block;
   padding: 12px 25px;
-  margin-bottom: 60px; /* nuevo, para separar del hero-img */
+  margin-bottom: 60px;
   background: linear-gradient(90deg, #a445ff, #5200ff);
   border-radius: 30px;
   color: #fff;
@@ -172,15 +140,7 @@ nav ul li a:hover { color: #a445ff; }
   font-weight: 600;
   transition: transform 0.3s, box-shadow 0.3s;
 }
-
-.hero-img img {
-  width: 200%;
-  max-width: 600px;
-  animation: float 4s ease-in-out infinite;
-  margin: 0 auto;
-  margin-top: 50px; /* nuevo, más separación desde el botón */
-}
-
+.hero-img img { width: 200%; max-width: 600px; animation: float 4s ease-in-out infinite; margin: 0 auto; margin-top: 50px; }
 
 /* SECCIONES */
 section {
@@ -192,7 +152,7 @@ section {
 }
 @keyframes sectionGradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-.features h2, .benefits h2, .chatbot h2, .download h2 {
+.features h2, .benefits h2, .chatbot h2, .download h2, .about h2, .contact h2 {
   font-size: 2.2rem;
   margin-bottom: 50px;
   color: #a445ff;
@@ -214,14 +174,46 @@ section {
 }
 .card img { width: 80px; margin-bottom: 20px; }
 
-/* CHATBOT */
-.chatbot {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 30px;
+/* BENEFICIOS */
+.benefits h2 {
+  font-size: 2.2rem;
+  margin-bottom: 30px;
+  color: #a445ff;
+  text-align: center;
 }
+
+.benefits .grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 45px;
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+.benefits .card {
+  background: rgba(164,69,255,0.08);
+  border: 1px solid rgba(164,69,255,0.3);
+  padding: 25px;
+  border-radius: 20px;
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.benefits .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(164,69,255,0.25);
+}
+
+.benefits .card img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  margin-bottom: 15px;
+}
+
+
+/* CHATBOT */
+.chatbot { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 30px; }
 .chat-text { flex: 1; max-width: 500px; }
 .chat-img img { width: 100%; max-width: 350px; animation: float 4s ease-in-out infinite; }
 
@@ -235,6 +227,53 @@ section {
 }
 .download .buttons a { flex: 1 1 200px; max-width: 220px; }
 
+/* SOBRE NOSOTROS */
+.about p, .contact p {
+  max-width: 600px;
+  margin: 0 auto 50px;
+  font-size: 1.2rem;
+  color: #ccc;
+}
+.team {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+.member {
+  text-align: center;
+  max-width: 200px;
+}
+.member img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 3px solid #a445ff;
+  margin-bottom: 15px;
+  transition: transform 0.3s;
+}
+.member img:hover { transform: scale(1.05); }
+
+/* CONTACTO */
+.contact-form {
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.contact-form input, .contact-form textarea {
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: rgba(164,69,255,0.1);
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+}
+.contact-form textarea { min-height: 120px; resize: none; }
+.contact-form .btn { align-self: center; padding: 12px 30px; }
+
 /* FOOTER */
 footer {
   text-align: center;
@@ -245,7 +284,6 @@ footer {
 }
 
 /* ANIMACIONES */
-@keyframes float { 0% { transform: translateY(0); } 50% { transform: translateY(-25px); } 100% { transform: translateY(0); } }
 @keyframes fadeInLeft { from { opacity: 0; transform: translateX(-50px); } to { opacity: 1; transform: translateX(0); } }
 
 /* MEDIA QUERIES */
@@ -253,7 +291,7 @@ footer {
   nav ul { gap: 20px; }
   .hero-text h1 { font-size: 2rem; }
   .hero-text p { font-size: 1rem; }
-  .features h2, .benefits h2, .chatbot h2, .download h2 { font-size: 2rem; }
+  .features h2, .benefits h2, .chatbot h2, .download h2, .about h2, .contact h2 { font-size: 2rem; }
 }
 @media screen and (max-width: 768px) {
   .navbar { flex-direction: column; gap: 10px; padding: 15px 20px; }

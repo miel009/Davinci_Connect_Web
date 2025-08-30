@@ -22,6 +22,8 @@
         <li><a href="#beneficios">Beneficios</a></li>
         <li><a href="#chatbot">Chatbot</a></li>
         <li><a href="#descarga">Descarga</a></li>
+        <li><a href="#nosotros">Nosotros</a></li>
+        <li><a href="#contacto">Contacto</a></li>
       </ul>
     </nav>
   </header>
@@ -30,7 +32,6 @@
   <!-- HERO -->
   <section class="hero">
     <div class="hero-text">
-      <!-- Logo DaVinci Connect -->
       <img src="Logo.png" alt="Logo DaVinci Connect" class="logo-hero">
 
       <h1>Organiza tu vida universitaria</h1>
@@ -40,13 +41,13 @@
     <div class="hero-img">
       <img src="splash.png" alt="Mockup DaVinci Connect">
     </div>
-    <!-- Burbujas -->
-<div class="bubble"></div>
-<div class="bubble"></div>
-<div class="bubble"></div>
-<div class="bubble"></div>
-<div class="bubble"></div>
 
+    <!-- Burbujas -->
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
   </section>
 
   <!-- FUNCIONALIDADES -->
@@ -78,18 +79,20 @@
 
   <!-- BENEFICIOS -->
   <section id="beneficios" class="benefits">
-    <h2>Beneficios</h2>
-    <div class="grid">
-      <div class="card">
-        <h3>Para Alumnos</h3>
-        <p>Acceso rápido a horarios, calificaciones y materiales.</p>
-      </div>
-      <div class="card">
-        <h3>Para Profesores</h3>
-        <p>Gestión de clases, aulas y comunicación con alumnos.</p>
-      </div>
+  <h2>Beneficios</h2>
+  <div class="grid">
+    <div class="card">
+      <img src="img/alumnos.png" alt="Beneficios para alumnos">
+      <h3>Para Alumnos</h3>
+      <p>Acceso rápido a horarios, calificaciones y materiales.</p>
     </div>
-  </section>
+    <div class="card">
+      <img src="img/profesores.png" alt="Beneficios para profesores">
+      <h3>Para Profesores</h3>
+      <p>Gestión de clases, aulas y comunicación con alumnos.</p>
+    </div>
+  </div>
+</section>
 
   <!-- CHATBOT -->
   <section id="chatbot" class="chatbot">
@@ -112,8 +115,45 @@
     </div>
   </section>
 
-  <script src="bubbles.js"></script>
+  <!-- SOBRE NOSOTROS -->
+  <section id="nosotros" class="about">
+    <h2>Sobre Nosotros</h2>
+    <p>Construido por amantes de la tecnología y la educación.  
+    Somos un equipo que busca mejorar la vida universitaria con herramientas innovadoras.</p>
 
+    <div class="team">
+      <div class="member">
+        <img src="Logo2.png" alt="Foto Desarrollador 1">
+        <h3>Nombre Apellido</h3>
+        <p>Desarrollador</p>
+      </div>
+      <div class="member">
+        <img src="Logo2.png" alt="Foto Desarrollador 2">
+        <h3>Nombre Apellido</h3>
+        <p>Diseñador</p>
+      </div>
+      <div class="member">
+        <img src="Logo2.png" alt="Foto Desarrollador 3">
+        <h3>Nombre Apellido</h3>
+        <p>Project Manager</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section id="contacto" class="contact">
+    <h2>¿Tienes algo que decirnos?</h2>
+    <p>Estamos aquí para escucharte y mejorar DaVinci Connect cada día.</p>
+
+    <form class="contact-form">
+      <input type="text" placeholder="Nombre y Apellido" required>
+      <input type="email" placeholder="Email" required>
+      <textarea placeholder="Mensaje" required></textarea>
+      <button type="submit" class="btn">Enviar</button>
+    </form>
+  </section>
+
+  <script src="bubbles.js"></script>
 
   <!-- FOOTER -->
   <footer>
