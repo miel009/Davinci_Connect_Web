@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -79,20 +80,20 @@
 
   <!-- BENEFICIOS -->
   <section id="beneficios" class="benefits">
-  <h2>Beneficios</h2>
-  <div class="grid">
-    <div class="card">
-      <img src="alumnos.png" alt="Beneficios para alumnos">
-      <h3>Para Alumnos</h3>
-      <p>Acceso rápido a horarios, calificaciones y materiales.</p>
+    <h2>Beneficios</h2>
+    <div class="grid">
+      <div class="card">
+        <img src="alumnos.png" alt="Beneficios para alumnos">
+        <h3>Para Alumnos</h3>
+        <p>Acceso rápido a horarios, calificaciones y materiales.</p>
+      </div>
+      <div class="card">
+        <img src="profesores.jpg" alt="Beneficios para profesores">
+        <h3>Para Profesores</h3>
+        <p>Gestión de clases, aulas y comunicación con alumnos.</p>
+      </div>
     </div>
-    <div class="card">
-      <img src="profesores.jpg" alt="Beneficios para profesores">
-      <h3>Para Profesores</h3>
-      <p>Gestión de clases, aulas y comunicación con alumnos.</p>
-    </div>
-  </div>
-</section>
+  </section>
 
   <!-- CHATBOT -->
   <section id="chatbot" class="chatbot">
@@ -118,8 +119,8 @@
   <!-- SOBRE NOSOTROS -->
   <section id="nosotros" class="about">
     <h2>Sobre Nosotros</h2>
-    <p>Construido por amantes de la tecnología y la educación.  
-    Somos un equipo que busca mejorar la vida universitaria con herramientas innovadoras.</p>
+    <p>Construido por amantes de la tecnología y la educación.
+      Somos un equipo que busca mejorar la vida universitaria con herramientas innovadoras.</p>
 
     <div class="team">
       <div class="member">
@@ -145,19 +146,23 @@
     <h2>¿Tienes algo que decirnos?</h2>
     <p>Estamos aquí para escucharte y mejorar DaVinci Connect cada día.</p>
 
-    <form class="contact-form">
-      <input type="text" placeholder="Nombre y Apellido" required>
-      <input type="email" placeholder="Email" required>
-      <textarea placeholder="Mensaje" required></textarea>
+    <form id="comentarioForm" class="contact-form">
+      <input type="text" id="nombre" placeholder="Nombre y Apellido" required>
+      <input type="email" id="email" placeholder="Email" required>
+      <textarea id="comentario" placeholder="Mensaje" required></textarea>
       <button type="submit" class="btn">Enviar</button>
     </form>
   </section>
 
   <script src="bubbles.js"></script>
 
+  <!-- SCRIPT FIREBASE -->
+  <script type="module" src="script.js"></script>
+
   <!-- FOOTER -->
   <footer>
     <p>© 2025 DaVinci Connect. Todos los derechos reservados.</p>
   </footer>
 </body>
+
 </html>
