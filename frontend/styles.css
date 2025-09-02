@@ -141,13 +141,13 @@ nav ul li a:hover { color: #a445ff; }
 /* Botones */
 .btn {
   display: inline-block;
-  padding: 12px 25px;
-  margin-bottom: 60px;
+  padding: 12px 45px;
+  margin-bottom: 0px;
   background: linear-gradient(90deg, #a445ff, #5200ff);
   border-radius: 30px;
   color: #fff;
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 60;
   transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
 }
 .btn:hover {
@@ -245,8 +245,8 @@ section, .smoke-section {
 
 .download .app-logo img {
   width: 100%;
-  max-width: 350px;
-  animation: float 4s ease-in-out infinite;
+  max-width: 450px;
+  animation: float 2s ease-in-out infinite;
 }
 /* Unifico estilo de párrafos */
 .about p, 
