@@ -244,7 +244,6 @@ section, .smoke-section {
 }
 
 .download .app-logo img {
-  width: 100%;
   max-width: 450px;
   animation: float 2s ease-in-out infinite;
 }
@@ -258,6 +257,13 @@ section, .smoke-section {
   font-size: 1.2rem;
   color: #ccc;
 }
+
+.contact-form input,
+.contact-form textarea,
+.contact-form .btn {
+  font-family: 'Orbitron', sans-serif;
+}
+
 
 /* About */
 .about p, .contact p { max-width: 600px; margin: 0 auto 50px; font-size: 1.2rem; color: #ccc; }
