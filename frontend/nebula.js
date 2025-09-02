@@ -133,3 +133,17 @@ sections.forEach(section => {
   }
   animateSection();
 });
+
+// ===== CARDS ANIMATION =====
+document.addEventListener("DOMContentLoaded", () => {
+  const cards = document.querySelectorAll(".card");
+  let index = 0;
+
+  if (cards.length > 0) {
+    setInterval(() => {
+      cards.forEach(card => card.classList.remove("active"));
+      cards[index].classList.add("active");
+      index = (index + 1) % cards.length;
+    }, 1000);
+  }
+});

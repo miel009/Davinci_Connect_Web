@@ -95,21 +95,20 @@
   </section>
 
   <!-- DESCARGA -->
-<section id="descarga" class="download smoke-section" data-darkness="0.55">
-  <h2>Descarga la app</h2>
-  <p>Disponible próximamente en Android y iOS</p>
+  <section id="descarga" class="download smoke-section" data-darkness="0.55">
+    <h2>Descarga la app</h2>
+    <p>Disponible próximamente en Android y iOS</p>
 
-  <!-- LOGO DE LA APP -->
-  <div class="app-logo">
-    <img src="Logo.png" alt="Logo de la app">
-  </div>
+    <!-- LOGO DE LA APP -->
+    <div class="app-logo">
+      <img src="Logo.png" alt="Logo de la app">
+    </div>
 
-  <div class="buttons">
-    <a href="#" class="btn">Google Play</a>
-    <a href="#" class="btn">App Store</a>
-  </div>
-</section>
-
+    <div class="buttons">
+      <a href="#" class="btn">Google Play</a>
+      <a href="#" class="btn">App Store</a>
+    </div>
+  </section>
 
   <!-- SOBRE NOSOTROS -->
   <section id="nosotros" class="about smoke-section" data-darkness="0.65">
@@ -149,25 +148,6 @@
 
   <script src="nebula.js"></script>
   <script src="sections-smoke.js"></script>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const cards = document.querySelectorAll(".card");
-  let index = 0;
-
-  setInterval(() => {
-    // Quitar animación de todas las cards
-    cards.forEach(card => card.classList.remove("active"));
-    
-    // Activar la animación en la card actual
-    cards[index].classList.add("active");
-
-    // Avanzar a la siguiente
-    index = (index + 1) % cards.length; 
-  }, 1000); // cada 1 segundo
-});
-</script>
-
 
   <footer>
     <p>© 2025 DaVinci Connect. Todos los derechos reservados.</p>
