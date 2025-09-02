@@ -142,7 +142,7 @@ nav ul li a:hover { color: #a445ff; }
 .btn {
   display: inline-block;
   padding: 12px 45px;
-  margin-bottom: 0px;
+  margin: 0 20px 15px 20px;
   background: linear-gradient(90deg, #a445ff, #5200ff);
   border-radius: 30px;
   color: #fff;
@@ -222,7 +222,7 @@ section, .smoke-section {
 
 /* Clase que se activa dinámicamente */
 .card.active {
-  animation: cardHover 1s ease-in-out;
+  animation: cardHover 1s ease-in-out ;
 }
 
 
