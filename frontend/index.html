@@ -6,11 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DaVinci Connect</title>
   <link rel="stylesheet" href="styles.css">
-  <!-- Fuente futurista -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="Logo2.png">
+  <link rel="icon" type="image/png" href="src/img/Logo2.png">
 </head>
 
 <body>
@@ -29,49 +26,41 @@
     </nav>
   </header>
 
-
   <!-- HERO -->
   <section class="hero">
+    <canvas id="nebula"></canvas>
     <div class="hero-text">
-      <img src="Logo.png" alt="Logo DaVinci Connect" class="logo-hero">
-
+      <img src="src/img/Logo.png" alt="Logo DaVinci Connect" class="logo-hero">
       <h1>Organiza tu vida universitaria</h1>
       <p>La app integral para estudiantes y profesores</p>
       <a href="#descarga" class="btn">Descargar App</a>
     </div>
     <div class="hero-img">
-      <img src="splash.png" alt="Mockup DaVinci Connect">
+      <img src="src/img/Splash.png" alt="Mockup DaVinci Connect">
     </div>
-
-    <!-- Burbujas -->
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
   </section>
 
   <!-- FUNCIONALIDADES -->
-  <section id="funcionalidades" class="features">
+  <section id="funcionalidades" class="features smoke-section" data-darkness="0.2">
     <h2>Funcionalidades</h2>
     <div class="grid">
       <div class="card">
-        <img src="img/calendario.png" alt="Calendario">
+        <img src="src/img/calendario.png" alt="Calendario">
         <h3>Calendario</h3>
         <p>Consulta tus horarios y exámenes en un solo lugar.</p>
       </div>
       <div class="card">
-        <img src="img/campus.png" alt="Campus">
+        <img src="src/img/campus.png" alt="Campus">
         <h3>Campus</h3>
         <p>Encuentra aulas y edificios asignados fácilmente.</p>
       </div>
       <div class="card">
-        <img src="img/temarios.png" alt="Temarios">
+        <img src="src/img/temarios.png" alt="Temarios">
         <h3>Temarios</h3>
         <p>Accede a los contenidos y programas de cada materia.</p>
       </div>
       <div class="card">
-        <img src="img/chat.png" alt="Chatbot">
+        <img src="src/img/chat1.png" alt="Chatbot">
         <h3>Chat Leo</h3>
         <p>Asistencia personalizada con nuestro chatbot inteligente.</p>
       </div>
@@ -96,20 +85,26 @@
   </section>
 
   <!-- CHATBOT -->
-  <section id="chatbot" class="chatbot">
+  <section id="chatbot" class="chatbot smoke-section" data-darkness="0.45">
     <div class="chat-text">
       <h2>Conoce a Leo</h2>
       <p>Tu asistente virtual para resolver dudas y ayudarte a organizar el día a día.</p>
     </div>
     <div class="chat-img">
-      <img src="img/chat-leo.png" alt="Chatbot Leo">
+      <img src="src/img/chat.png" alt="Chatbot Leo">
     </div>
   </section>
 
   <!-- DESCARGA -->
-  <section id="descarga" class="download">
+  <section id="descarga" class="download smoke-section" data-darkness="0.55">
     <h2>Descarga la app</h2>
     <p>Disponible próximamente en Android y iOS</p>
+
+    <!-- LOGO DE LA APP -->
+    <div class="app-logo">
+      <img src="src/img/Logo.png" alt="Logo de la app">
+    </div>
+
     <div class="buttons">
       <a href="#" class="btn">Google Play</a>
       <a href="#" class="btn">App Store</a>
@@ -117,24 +112,24 @@
   </section>
 
   <!-- SOBRE NOSOTROS -->
-  <section id="nosotros" class="about">
+  <section id="nosotros" class="about smoke-section" data-darkness="0.65">
     <h2>Sobre Nosotros</h2>
     <p>Construido por amantes de la tecnología y la educación.
       Somos un equipo que busca mejorar la vida universitaria con herramientas innovadoras.</p>
 
     <div class="team">
       <div class="member">
-        <img src="Logo2.png" alt="Foto Desarrollador 1">
+        <img src="src/img/Logo2.png" alt="Foto Desarrollador 1">
         <h3>Nombre Apellido</h3>
         <p>Desarrollador</p>
       </div>
       <div class="member">
-        <img src="Logo2.png" alt="Foto Desarrollador 2">
+        <img src="src/img/Logo2.png" alt="Foto Desarrollador 2">
         <h3>Nombre Apellido</h3>
         <p>Diseñador</p>
       </div>
       <div class="member">
-        <img src="Logo2.png" alt="Foto Desarrollador 3">
+        <img src="src/img/Logo2.png" alt="Foto Desarrollador 3">
         <h3>Nombre Apellido</h3>
         <p>Project Manager</p>
       </div>
@@ -142,10 +137,9 @@
   </section>
 
   <!-- CONTACTO -->
-  <section id="contacto" class="contact">
+  <section id="contacto" class="contact smoke-section" data-darkness="0.75">
     <h2>¿Tienes algo que decirnos?</h2>
     <p>Estamos aquí para escucharte y mejorar DaVinci Connect cada día.</p>
-
     <form id="comentarioForm" class="contact-form">
       <input type="text" id="nombre" placeholder="Nombre y Apellido" required>
       <input type="email" id="email" placeholder="Email" required>
@@ -154,7 +148,11 @@
     </form>
   </section>
 
-  <script src="bubbles.js"></script>
+  <script src="nebula.js"></script>
+  <script src="sections-smoke.js"></script>
+
+    <!-- SCRIPT FIREBASE -->
+  <script type="module" src="script.js"></script>
 
   <!-- SCRIPT FIREBASE -->
   <script type="module" src="script.js"></script>
