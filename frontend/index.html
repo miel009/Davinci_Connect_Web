@@ -138,16 +138,19 @@
   <section id="contacto" class="contact smoke-section" data-darkness="0.75">
     <h2>¿Tienes algo que decirnos?</h2>
     <p>Estamos aquí para escucharte y mejorar DaVinci Connect cada día.</p>
-    <form class="contact-form">
-      <input type="text" placeholder="Nombre y Apellido" required>
-      <input type="email" placeholder="Email" required>
-      <textarea placeholder="Mensaje" required></textarea>
+    <form id="comentarioForm" class="contact-form">
+      <input type="text" id="nombre" placeholder="Nombre y Apellido" required>
+      <input type="email" id="email" placeholder="Email" required>
+      <textarea id="comentario" placeholder="Mensaje" required></textarea>
       <button type="submit" class="btn">Enviar</button>
     </form>
   </section>
 
   <script src="nebula.js"></script>
   <script src="sections-smoke.js"></script>
+
+    <!-- SCRIPT FIREBASE -->
+  <script type="module" src="script.js"></script>
 
   <footer>
     <p>© 2025 DaVinci Connect. Todos los derechos reservados.</p>
