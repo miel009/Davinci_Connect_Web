@@ -299,3 +299,37 @@ footer { text-align: center; padding: 30px; background: #0a0a0a; color: #aaa; fo
   .hero-img img { max-width: 90%; }
   .chatbot { flex-direction: column; gap: 20px; }
 }
+
+#listaComentarios {
+  display: flex;
+  overflow-x: auto;          
+  scroll-snap-type: x mandatory; 
+  gap: 20px;
+  padding: 20px;
+  -webkit-overflow-scrolling: touch; 
+}
+
+#listaComentarios .card {
+  flex: 0 0 auto;           
+  scroll-snap-align: start; 
+  background: linear-gradient(135deg, rgba(164,69,255,0.3), rgba(0,0,0,0.05));
+  padding: 20px;
+  border-radius: 15px;
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+  width: 250px;
+}
+
+#listaComentarios .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 25px rgba(164, 69, 255, 0.5);
+}
+
+#listaComentarios::-webkit-scrollbar {
+  height: 8px;
+}
+#listaComentarios::-webkit-scrollbar-thumb {
+  background: rgba(164,69,255,0.3);
+  border-radius: 4px;
+}
+

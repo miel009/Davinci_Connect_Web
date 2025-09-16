@@ -1,10 +1,8 @@
 const form = document.getElementById("comentarioForm"); 
-const respuesta = document.createElement("div"); 
-form.parentNode.appendChild(respuesta); 
-
-const listaComentarios = document.createElement("div");
-listaComentarios.id = "listaComentarios";
-form.parentNode.appendChild(listaComentarios);
+//seccion descargas
+const listaComentarios = document.getElementById("listaComentarios");
+//const respuesta = document.createElement("mensajeRespuesta");
+listaComentarios.parentNode.insertBefore(respuesta, listaComentarios);
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -23,18 +21,53 @@ form.addEventListener("submit", async (e) => {
     if (!res.ok) throw new Error("Error en el servidor");
 
     await res.json();
-    respuesta.innerText = "Comentario enviado con éxito ✅";
+    const respuesta = document.getElementById("respuesta");
+   // respuesta.innerText = "Comentario enviado con éxito ✅";
+    respuesta.classList.remove("error");
     form.reset();
-    setTimeout(() => {
-        respuesta.innerText = "";
-        respuesta.classList.remove("success");
-      }, 5000);
-
-    //cargarComentarios(); // Implementar
+    cargarComentarios();
   } catch (error) {
     console.error("Error:", error);
     respuesta.innerText = "Ocurrió un error ❌";
   }
 });
+// Obtener comentarios y mostrarlos
+async function cargarComentarios() {
+  try {
+    const res = await fetch("http://localhost:4000/api/comentarios");
+    const data = await res.json();
 
+    listaComentarios.innerHTML = "";
+    data.forEach((c) => {
+      const fecha = c.fecha?._seconds
+        ? new Date(c.fecha._seconds * 1000).toLocaleString()
+        : "Sin fecha";
+    //avatar random - usuario
+      const avatarURL = `https://api.dicebear.com/9.x/identicon/svg?seed=${encodeURIComponent(c.usuario)}`;
+      const card = document.createElement("div");
+      card.classList.add("card");
+      card.innerHTML = `
+        <img src="${avatarURL}" alt="Avatar de ${c.usuario}" style="width:60px; height:60px; border-radius:50%; margin-bottom:10px;">
+        <h3>${c.usuario}</h3>
+        <p>${c.mensaje}</p>
+        <small>${fecha} • ${c.email}</small>
+      `;
+      listaComentarios.appendChild(card);
+    });
+  } catch (error) {
+    console.error("Error cargando comentarios:", error);
+    listaComentarios.innerHTML = "<p>No se pudieron cargar los comentarios.</p>";
+  }
+}
 
+const anchoCard = 270; 
+
+setInterval(() => {
+  listaComentarios.scrollBy({ left: anchoCard, behavior: "smooth" });
+  if (listaComentarios.scrollLeft + listaComentarios.clientWidth >= listaComentarios.scrollWidth) {
+    listaComentarios.scrollTo({ left: 0, behavior: "smooth" });
+  }
+}, 3000);
+
+window.addEventListener("DOMContentLoaded", cargarComentarios);
+setInterval(cargarComentarios, 20000);  
