@@ -1,48 +1,73 @@
-// Importa Firebase
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
-
-// Tu configuración de Firebase (copiada desde Firebase console)
-const firebaseConfig = {
-    apiKey: "AIzaSyAZzB2eXstBep6NEQjhyQvDXZgceGJT4mY",
-    authDomain: "comentarios-form.firebaseapp.com",
-    projectId: "comentarios-form",
-    storageBucket: "comentarios-form.firebasestorage.app",
-    messagingSenderId: "74168137309",
-    appId: "1:74168137309:web:5e858f4c742dccc4f0ffb4"
-};
-
-// Inicializa Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-// Referencia a la colección "comentarios"
-const comentariosRef = collection(db, "comentarios");
-
-// Capturamos el formulario
-const form = document.getElementById("comentarioForm"); // coincide con tu HTML
-const respuesta = document.createElement("div"); // crea un div para mensajes
-form.parentNode.appendChild(respuesta); // lo añadimos debajo del formulario
+const form = document.getElementById("comentarioForm"); 
+//seccion descargas
+const listaComentarios = document.getElementById("listaComentarios");
+//const respuesta = document.createElement("mensajeRespuesta");
+listaComentarios.parentNode.insertBefore(respuesta, listaComentarios);
 
 form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const nombre = document.getElementById("nombre").value;
-    const email = document.getElementById("email").value;
-    const mensaje = document.getElementById("comentario").value; // coincide con tu textarea
+  const nombre = document.getElementById("nombre").value;
+  const email = document.getElementById("email").value;
+  const mensaje = document.getElementById("comentario").value;
 
-    try {
-        await addDoc(comentariosRef, {
-            nombre,
-            email,
-            mensaje,
-            fecha: new Date()
-        });
+  try {
+    const res = await fetch("http://localhost:4000/api/comentarios", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ usuario: nombre, email, mensaje }),
+    });
 
-        respuesta.innerText = "Comentario enviado con éxito ✅";
-        form.reset();
-    } catch (error) {
-        console.error("Error guardando comentario: ", error);
-        respuesta.innerText = "Ocurrió un error ❌";
-    }
+    if (!res.ok) throw new Error("Error en el servidor");
+
+    await res.json();
+    const respuesta = document.getElementById("respuesta");
+   // respuesta.innerText = "Comentario enviado con éxito ✅";
+    respuesta.classList.remove("error");
+    form.reset();
+    cargarComentarios();
+  } catch (error) {
+    console.error("Error:", error);
+    respuesta.innerText = "Ocurrió un error ❌";
+  }
 });
+// Obtener comentarios y mostrarlos
+async function cargarComentarios() {
+  try {
+    const res = await fetch("http://localhost:4000/api/comentarios");
+    const data = await res.json();
+
+    listaComentarios.innerHTML = "";
+    data.forEach((c) => {
+      const fecha = c.fecha?._seconds
+        ? new Date(c.fecha._seconds * 1000).toLocaleString()
+        : "Sin fecha";
+    //avatar random - usuario
+      const avatarURL = `https://api.dicebear.com/9.x/identicon/svg?seed=${encodeURIComponent(c.usuario)}`;
+      const card = document.createElement("div");
+      card.classList.add("card");
+      card.innerHTML = `
+        <img src="${avatarURL}" alt="Avatar de ${c.usuario}" style="width:60px; height:60px; border-radius:50%; margin-bottom:10px;">
+        <h3>${c.usuario}</h3>
+        <p>${c.mensaje}</p>
+        <small>${fecha} • ${c.email}</small>
+      `;
+      listaComentarios.appendChild(card);
+    });
+  } catch (error) {
+    console.error("Error cargando comentarios:", error);
+    listaComentarios.innerHTML = "<p>No se pudieron cargar los comentarios.</p>";
+  }
+}
+
+const anchoCard = 270; 
+
+setInterval(() => {
+  listaComentarios.scrollBy({ left: anchoCard, behavior: "smooth" });
+  if (listaComentarios.scrollLeft + listaComentarios.clientWidth >= listaComentarios.scrollWidth) {
+    listaComentarios.scrollTo({ left: 0, behavior: "smooth" });
+  }
+}, 3000);
+
+window.addEventListener("DOMContentLoaded", cargarComentarios);
+setInterval(cargarComentarios, 20000);  
