@@ -31,6 +31,11 @@ form.addEventListener("submit", async (e) => {
     respuesta.classList.remove("error");
     form.reset();
     cargarComentarios();
+    // ocultar notificacion dsp de 5 segundos
+  setTimeout(() => {
+    respuesta.innerText = "";
+  }, 5000);
+
   } catch (error) {
     console.error("Error:", error);
     respuesta.innerText = "Ocurrió un error ❌";
@@ -48,7 +53,6 @@ async function cargarComentarios() {
       const fecha = c.fecha?._seconds
         ? new Date(c.fecha._seconds * 1000).toLocaleString()
         : "Sin fecha";
-    //avatar random - usuario
       //avatar random - usuario
       const avatarURL = `https://api.dicebear.com/9.x/identicon/svg?seed=${encodeURIComponent(c.usuario)}`;
       const card = document.createElement("div");
