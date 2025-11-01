@@ -72,12 +72,17 @@ async function cargarComentarios() {
 }
 const anchoCard = 270;
 
+let posicion = 0;
+
 setInterval(() => {
-  listaComentarios.scrollBy({ left: anchoCard, behavior: "smooth" });
-  if (listaComentarios.scrollLeft + listaComentarios.clientWidth >= listaComentarios.scrollWidth) {
-    listaComentarios.scrollTo({ left: 0, behavior: "smooth" });
+  posicion += anchoCard;
+
+  if (posicion + listaComentarios.clientWidth > listaComentarios.scrollWidth) {
+    posicion = 0; 
   }
+
+  listaComentarios.scrollTo({ left: posicion, behavior: "smooth" });
 }, 3000);
 
 window.addEventListener("DOMContentLoaded", cargarComentarios);
-setInterval(cargarComentarios, 20000);  
+setInterval(cargarComentarios, 6000);  
