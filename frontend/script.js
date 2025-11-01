@@ -18,7 +18,7 @@ form.addEventListener("submit", async (e) => {
   const mensaje = document.getElementById("comentario").value;
 
   try {
-    const res = await fetch("http://localhost:4000/api/comentarios", {
+    const res = await fetch("https://davinci-connect-web.onrender.com/api/comentarios", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ usuario: nombre, email, mensaje }),
@@ -45,7 +45,7 @@ form.addEventListener("submit", async (e) => {
 // Obtener comentarios y mostrarlos
 async function cargarComentarios() {
   try {
-    const res = await fetch("/api/comentarios");
+    const res = await fetch("https://davinci-connect-web.onrender.com/api/comentarios");
     const data = await res.json();
 
     listaComentarios.innerHTML = "";
