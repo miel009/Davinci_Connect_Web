@@ -66,3 +66,18 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+.mensaje-respuesta {
+  color: #fff;
+  margin-top: 10px;
+  text-align: center;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.mensaje-respuesta.error {
+  color: #ff4d4d;
+}
+
+.mensaje-respuesta:not(.error) {
+  color: #7fff7f;
+}
