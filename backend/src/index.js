@@ -1,25 +1,33 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-
 import comentarioRoutes from "./routes/route_comentario.js";
 
 dotenv.config();
 const app = express();
 
 app.use(cors({
-  origin: [
-    "https://davinci-connect-web.vercel.app", // dominio 
-    "https://davinci-connect-jgbd3ffj0-melanys-projects-35f6ab41.vercel.app", //build actual
-    "http://localhost:5173" // para pruebas locales
-  ],
-  methods: ["GET", "POST"],
-  allowedHeaders: ["Content-Type"]
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+    // Permitir dominios de Vercel y entorno local
+    if (
+      origin.includes("vercel.app") ||   // cualquier subdominio de Vercel
+      origin.includes("localhost") ||    // entorno local
+      origin.includes("127.0.0.1")
+    ) {
+      return callback(null, true);
+    }
+    return callback(new Error("No permitido por CORS"));
+  },
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type"],
 }));
+
+app.use(express.json());
 
 app.use("/api/comentarios", comentarioRoutes);
 app.get("/", (req, res) => {
-  res.send("API de comentarios funcionando correctamente ");
+  res.send("API de comentarios funcionando correctamente con CORS dinámico");
 });
 
 const PORT = process.env.PORT || 4000;
