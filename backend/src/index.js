@@ -9,8 +9,9 @@ const app = express();
 
 app.use(cors({
   origin: [
-    "https://davinci-web-sepia.vercel.app", // frontend
-    "http://localhost:5173" 
+    "https://davinci-connect-web.vercel.app", // dominio 
+    "https://davinci-connect-jgbd3ffj0-melanys-projects-35f6ab41.vercel.app", //build actual
+    "http://localhost:5173" // para pruebas locales
   ],
   methods: ["GET", "POST"],
   allowedHeaders: ["Content-Type"]
