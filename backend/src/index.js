@@ -17,12 +17,10 @@ app.use(cors({
   allowedHeaders: ["Content-Type"]
 }));
 
-app.use(express.json());
-
-// Rutas
 app.use("/api/comentarios", comentarioRoutes);
+app.get("/", (req, res) => {
+  res.send("API de comentarios funcionando correctamente ");
+});
 
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
+app.listen(PORT, () => console.log(`Servidor corriendo en puerto ${PORT}`));
