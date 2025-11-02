@@ -7,7 +7,15 @@ import comentarioRoutes from "./routes/route_comentario.js";
 dotenv.config();
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: [
+    "https://davinci-web-sepia.vercel.app", // frontend
+    "http://localhost:5173" 
+  ],
+  methods: ["GET", "POST"],
+  allowedHeaders: ["Content-Type"]
+}));
+
 app.use(express.json());
 
 // Rutas
