@@ -28,7 +28,7 @@ dist-ssr
 /frontend/node_modules/
 node_modules/
 # carpeta de build
-dist/
+frontend/dist/
 # firebase
 /backend/serviceAccountKey.json
 
