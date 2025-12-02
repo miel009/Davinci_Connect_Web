@@ -148,12 +148,37 @@
       <button type="submit" class="btn">Enviar</button>
     </form>
     <!--<div id="mensajeRespuesta"></div> -->
+        <!-- Enlace para administradores -->
+    <p class="admin-p">Si eres administrador <button id="adminBtn" class="admin-link">haz click acá</button></p>
+
+    <!-- Modal de Login de administrador -->
+    <div id="adminModal" class="modal" aria-hidden="true">
+      <div class="modal-overlay" id="modalOverlay"></div>
+      <div class="modal-content smoke-section" role="dialog" aria-modal="true" aria-labelledby="adminTitle">
+        <h3 id="adminTitle">Ingreso Administrador</h3>
+        <p>Ingrese sus credenciales para acceder al panel de administración.</p>
+        <form id="adminLoginForm" class="contact-form admin-form">
+          <input type="email" id="adminEmail" placeholder="Email" required>
+          <input type="password" id="adminPassword" placeholder="Contraseña" required>
+          <div style="display:flex; gap:12px; justify-content:center; align-items:center;">
+            <button type="submit" class="btn">Ingresar</button>
+            <button type="button" id="adminCancel" class="btn" style="background:transparent; border:1px solid rgba(255,255,255,0.08);">Cancelar</button>
+          </div>
+          <p id="adminError" style="color:#ff6b6b; text-align:center; display:none;">Credenciales inválidas.</p>
+        </form>
+      </div>
+    </div>
     
   </section>
 
  
   <script src="/nebula.js"></script>
+  <!-- Firebase compat SDKs (client) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="/firebase-client.js"></script>
   <script type="module" src="/script.js"></script>
+  </section>
 
   <footer>
     <p>© 2025 DaVinci Connect. Todos los derechos reservados.</p>

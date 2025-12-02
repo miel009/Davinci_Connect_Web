@@ -31,5 +31,10 @@ node_modules/
 frontend/dist/
 # firebase
 /backend/serviceAccountKey.json
+functions/.runtimeconfig.json
+functions/.runtimeconfig.json
+
+.vercel
+.output
 
 Thumbs.db

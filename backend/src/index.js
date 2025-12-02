@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import comentarioRoutes from "./routes/route_comentario.js";
+import adminRoutes from "./routes/route_admin.js";
 
 dotenv.config();
 const app = express();
@@ -19,13 +20,14 @@ app.use(cors({
     }
     return callback(new Error("No permitido por CORS"));
   },
-  methods: ["GET", "POST", "OPTIONS"],
-  allowedHeaders: ["Content-Type"],
+  methods: ["GET", "POST", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 }));
 
 app.use(express.json());
 
 app.use("/api/comentarios", comentarioRoutes);
+app.use("/api/admin", adminRoutes);
 app.get("/", (req, res) => {
   res.send("API de comentarios funcionando correctamente con CORS dinámico");
 });

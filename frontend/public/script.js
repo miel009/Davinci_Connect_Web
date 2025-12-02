@@ -86,3 +86,76 @@ setInterval(() => {
 
 window.addEventListener("DOMContentLoaded", cargarComentarios);
 setInterval(cargarComentarios, 6000);  
+
+
+// --- Lógica para modal de administración (abrir / cerrar / login simulado)
+document.addEventListener("DOMContentLoaded", () => {
+  const adminBtn = document.getElementById("adminBtn");
+  const adminModal = document.getElementById("adminModal");
+  const modalOverlay = document.getElementById("modalOverlay");
+  const adminCancel = document.getElementById("adminCancel");
+  const adminForm = document.getElementById("adminLoginForm");
+  const adminError = document.getElementById("adminError");
+
+  function openModal() {
+    adminModal.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    adminModal.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = '';
+    adminError.style.display = 'none';
+    adminForm.reset();
+  }
+
+  if (adminBtn) adminBtn.addEventListener("click", openModal);
+  if (modalOverlay) modalOverlay.addEventListener("click", closeModal);
+  if (adminCancel) adminCancel.addEventListener("click", closeModal);
+
+  if (adminForm) {
+    adminForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("adminEmail").value.trim();
+      const pwd = document.getElementById("adminPassword").value;
+
+      if (!window.__davinciFirebase) {
+        adminError.style.display = 'block';
+        adminError.innerText = 'Firebase no está configurado en el cliente. Copia tu config en /public/firebase-client.js';
+        return;
+      }
+
+      try {
+        // Iniciar sesión con Firebase Auth cliente
+        const { token } = await window.__davinciFirebase.signIn(email, pwd);
+
+        // Verificar token en backend
+        const verifyRes = await fetch('/api/admin/verify', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify({})
+        });
+
+        if (!verifyRes.ok) {
+          const txt = await verifyRes.text().catch(() => 'No autorizado');
+          adminError.style.display = 'block';
+          adminError.innerText = 'Acceso denegado: ' + txt;
+          try { await window.__davinciFirebase.signOut(); } catch(e){
+            console.error(e);
+          }
+          return;
+        }
+
+        // Acceso concedido
+        closeModal();
+        window.location.href = '/admin.html';
+      } catch (err) {
+        console.error(err);
+        adminError.style.display = 'block';
+        adminError.innerText = err.message || 'Error autenticando';
+      }
+    });
+  }
+});
