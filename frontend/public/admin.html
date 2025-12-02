@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Admin - DaVinci Connect</title>
   <link rel="stylesheet" href="/styles.css">
+  <link rel="icon" type="image/png" href="img/Logo2.png">
 </head>
 <body>
   <header class="navbar">
@@ -81,7 +82,27 @@
       <!-- 🔵 OPCIONAL: placeholders para futuras secciones -->
       <div id="adminContents" class="admin-section" style="display:none; margin-top:20px;">
         <h4 style="color:#a445ff;">Contenidos</h4>
-        <p style="color:#aaa;">Aquí irán los contenidos.</p>
+
+        <div style="margin-top:8px; color:#ddd; display:flex; gap:8px; align-items:center;">
+          <form id="contentFilterForm" style="display:flex; gap:8px; align-items:center;">
+            <input id="contentFilterInput" type="text" placeholder="Filtrar por carpeta/prefix (p.ej. images/)" style="padding:8px; border-radius:8px; border:none; width:260px; background:rgba(255,255,255,0.03); color:#fff;" />
+            <button class="btn" type="submit">Filtrar</button>
+            <button id="clearFilterBtn" class="btn" type="button" style="background:transparent;">Limpiar</button>
+          </form>
+        </div>
+
+        <div style="margin-top:8px; color:#ddd;">
+          <form id="uploadContentForm" style="display:flex; gap:8px; align-items:center;">
+            <input id="contentFileInput" type="file" />
+            <input id="contentPathInput" type="text" placeholder="(opcional) carpeta/path" style="padding:8px; border-radius:8px; border:none; background:rgba(255,255,255,0.03); color:#fff;" />
+            <button class="btn" type="submit">Subir</button>
+          </form>
+        </div>
+
+        <div id="adminContentsList" style="margin-top:12px; color:#ddd;">Cargando contenidos...</div>
+        <div style="margin-top:8px; text-align:center;">
+          <button id="loadMoreContentsBtn" class="btn" style="display:none;">Cargar más</button>
+        </div>
       </div>
 
       <div id="adminConfig" class="admin-section" style="display:none; margin-top:20px;">

@@ -22,6 +22,8 @@ if (!admin.apps.length) {
   try {
     admin.initializeApp({
       credential: admin.credential.cert(serviceAccount),
+      // Configurar storageBucket si no está en la variable de entorno
+      storageBucket: process.env.FIREBASE_STORAGE_BUCKET || (serviceAccount && serviceAccount.project_id ? `${serviceAccount.project_id}.appspot.com` : undefined),
     });
     console.log("✅ Firebase Admin inicializado correctamente");
   } catch (initError) {
