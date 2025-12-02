@@ -2,16 +2,16 @@
 
 (async function () {
 
-   // 👇 NUEVO: base de la API (local vs producción)
-   const API_BASE = window.location.hostname.includes("localhost")
-   ? "http://localhost:4000"                              // cuando probás en local
-   : "https://davinci-connect-web.onrender.com";          // backend en Render
+  // 👇 NUEVO: base de la API (local vs producción)
+  const API_BASE = window.location.hostname.includes("localhost")
+    ? "http://localhost:4000"                              // cuando probás en local
+    : "https://davinci-connect-web.onrender.com";          // backend en Render
 
- function apiUrl(path) {
-   return `${API_BASE}${path}`;
- }
+  function apiUrl(path) {
+    return `${API_BASE}${path}`;
+  }
   let adminMsgTimer = null;
-  
+
 
   function show(msg, type, autoHide = true, hideAfterMs = 5000) {
     const el = document.getElementById("adminMessage");
@@ -44,7 +44,7 @@
     return await window.__davinciFirebase.getCurrentUserToken();
   }
 
-    function setAuthenticatedUI(isAuth, email) {
+  function setAuthenticatedUI(isAuth, email) {
     document.getElementById("adminAuth").style.display = isAuth ? "none" : "";
     document.getElementById("adminTools").style.display = isAuth ? "" : "none";
     document.getElementById("adminUserInfo").style.display = isAuth ? "" : "none";
@@ -52,7 +52,7 @@
   }
 
   /* CAMBIO DE SECCIONES DEL PANEL*/
-  window.showSection = function(section) {
+  window.showSection = function (section) {
     const sections = {
       usuarios: "adminUsers",
       comentarios: "adminComments",
@@ -66,7 +66,7 @@
     });
 
     const target = document.getElementById(sections[section]);
-      if (target) {
+    if (target) {
       target.style.display = "block";
 
       if (section === "usuarios") loadUsuarios();
@@ -95,7 +95,7 @@
       });
 
       if (!res.ok) {
-        const e = await res.json().catch(()=>({}));
+        const e = await res.json().catch(() => ({}));
         cont.innerHTML = e.error || "Error cargando usuarios.";
         return;
       }
@@ -158,7 +158,7 @@
 
       const res = await fetch(url, { headers: { Authorization: 'Bearer ' + token } });
       if (!res.ok) {
-        const e = await res.json().catch(()=>({}));
+        const e = await res.json().catch(() => ({}));
         cont.innerHTML = e.error || 'Error cargando contenidos.';
         return;
       }
@@ -205,7 +205,7 @@
             inner.innerHTML = '';
             const subPrefixes = d2.prefixes || [];
             const subItems = d2.items || [];
-            const folderNext = d2.nextPageToken || null;
+            let folderNext = d2.nextPageToken || null;
 
             // render subfolders as nested <details>
             for (const sp of subPrefixes) {
@@ -216,7 +216,7 @@
               // include count if available
               const subCountObj = (d2.prefixCounts && d2.prefixCounts[sp]) || null;
               const subCountText = subCountObj ? (subCountObj.count + (subCountObj.truncated ? '+' : '')) : '';
-              subSummary.innerText = `📁 ${subFolderName || sp}${subCountText ? ' ('+subCountText+')' : ''}`;
+              subSummary.innerText = `📁 ${subFolderName || sp}${subCountText ? ' (' + subCountText + ')' : ''}`;
               subDetails.appendChild(subSummary);
               const subInner = document.createElement('div');
               subInner.style.marginLeft = '16px';
@@ -292,7 +292,9 @@
                     row.appendChild(btns);
                     inner.insertBefore(row, moreBtn);
                   }
-                  if (!nextToken) moreBtn.style.display = 'none'; else { folderNext = nextToken; moreBtn.disabled = false; }
+                  if (!nextToken) moreBtn.style.display = 'none'; else {
+                    folderNext = nextToken; moreBtn.disabled = false;
+                  }
                 } catch (err) { console.error(err); show('Error cargando más', 'error'); moreBtn.disabled = false; }
               });
               inner.appendChild(moreBtn);
@@ -300,6 +302,7 @@
 
             inner.setAttribute('data-loaded', '1');
           } catch (e) {
+            console.log(e);
             inner.innerHTML = 'Error cargando carpeta.';
           }
         });
@@ -356,7 +359,7 @@
           body: form
         });
 
-        const data = await res.json().catch(()=>({}));
+        const data = await res.json().catch(() => ({}));
         if (!res.ok) return show(data.error || 'Error subiendo archivo', 'error');
 
         show('Archivo subido', 'success');
@@ -371,7 +374,7 @@
   }
 
   // Eliminar contenido
-  window.deleteContent = async function(nameEncoded) {
+  window.deleteContent = async function (nameEncoded) {
     if (!confirm('¿Eliminar este archivo?')) return;
     const token = await getToken();
     if (!token) return show('No autenticado', 'error');
@@ -382,7 +385,7 @@
         headers: { Authorization: 'Bearer ' + token }
       });
 
-      const data = await res.json().catch(()=>({}));
+      const data = await res.json().catch(() => ({}));
       if (!res.ok) return show(data.error || 'No se pudo eliminar', 'error');
       show('Contenido eliminado', 'success');
       loadContents();
@@ -421,7 +424,7 @@
   }
 
   /* USUARIOS – eliminar */
-  window.deleteUsuario = async function(uid) {
+  window.deleteUsuario = async function (uid) {
     if (!confirm("¿Eliminar este usuario definitivamente?")) return;
 
     const token = await getToken();
@@ -488,28 +491,28 @@
   }
 
   /* COMENTARIOS (listar y eliminar) */
-async function loadComentarios() {
-  const lista = document.getElementById("adminComments");
-  if (!lista) return;
-  lista.innerHTML = "Cargando...";
+  async function loadComentarios() {
+    const lista = document.getElementById("adminComments");
+    if (!lista) return;
+    lista.innerHTML = "Cargando...";
 
-  try {
-    const res = await fetch(apiUrl("/api/comentarios"));
-    const data = await res.json();
+    try {
+      const res = await fetch(apiUrl("/api/comentarios"));
+      const data = await res.json();
 
-    lista.innerHTML = "";
+      lista.innerHTML = "";
 
-    for (const c of data) {
-      const row = document.createElement("div");
-      row.className = "admin-comment-row";
-      row.style.display = "flex";
-      row.style.justifyContent = "space-between";
-      row.style.alignItems = "center";
-      row.style.gap = "12px";
-      row.style.padding = "10px";
-      row.style.borderBottom = "1px solid rgba(255,255,255,0.04)";
+      for (const c of data) {
+        const row = document.createElement("div");
+        row.className = "admin-comment-row";
+        row.style.display = "flex";
+        row.style.justifyContent = "space-between";
+        row.style.alignItems = "center";
+        row.style.gap = "12px";
+        row.style.padding = "10px";
+        row.style.borderBottom = "1px solid rgba(255,255,255,0.04)";
 
-      row.innerHTML = `
+        row.innerHTML = `
         <div style="flex:1">
           <strong>${c.usuario}</strong>
           <small style="color:#999">${c.email}</small>
@@ -517,37 +520,37 @@ async function loadComentarios() {
         </div>
       `;
 
-      const btn = document.createElement("button");
-      btn.className = "btn";
-      btn.innerText = "Eliminar";
-      btn.addEventListener("click", async () => {
-        if (!confirm("¿Eliminar comentario?")) return;
+        const btn = document.createElement("button");
+        btn.className = "btn";
+        btn.innerText = "Eliminar";
+        btn.addEventListener("click", async () => {
+          if (!confirm("¿Eliminar comentario?")) return;
 
-        const token = await getToken();
-        if (!token) return show("No estás autenticado.", "error");
+          const token = await getToken();
+          if (!token) return show("No estás autenticado.", "error");
 
-        const del = await fetch(apiUrl("/api/admin/comments/" + c.id), {
-          method: "DELETE",
-          headers: { Authorization: "Bearer " + token },
+          const del = await fetch(apiUrl("/api/admin/comments/" + c.id), {
+            method: "DELETE",
+            headers: { Authorization: "Bearer " + token },
+          });
+
+          if (!del.ok) {
+            const d = await del.json().catch(() => ({}));
+            return show(d.error || "Error eliminando comentario", "error");
+          }
+
+          show("Comentario eliminado", "success");
+          loadComentarios();
         });
 
-        if (!del.ok) {
-          const d = await del.json().catch(() => ({}));
-          return show(d.error || "Error eliminando comentario", "error");
-        }
-
-        show("Comentario eliminado", "success");
-        loadComentarios();
-      });
-
-      row.appendChild(btn);
-      lista.appendChild(row);
+        row.appendChild(btn);
+        lista.appendChild(row);
+      }
+    } catch (err) {
+      console.error(err);
+      lista.innerHTML = "No se pudieron cargar comentarios.";
     }
-  } catch (err) {
-    console.error(err);
-    lista.innerHTML = "No se pudieron cargar comentarios.";
   }
-}
 
   /*   LOGIN ADMIN*/
   const adminLoginFormLocal = document.getElementById("adminLoginFormLocal");
@@ -571,7 +574,7 @@ async function loadComentarios() {
         setAuthenticatedUI(false);
         show("Acceso denegado: no eres administrador", "error");
         try { await window.__davinciFirebase.signOut(); } catch {
-            // Ignorar error de signOut
+          // Ignorar error de signOut
 
         }
         return;
@@ -627,9 +630,8 @@ async function loadComentarios() {
 
   if (adminSignOutBtn) {
     adminSignOutBtn.addEventListener("click", async () => {
-      try { await window.__davinciFirebase.signOut(); } catch 
-      {
-          // Ignorar error de signOut
+      try { await window.__davinciFirebase.signOut(); } catch {
+        // Ignorar error de signOut
       }
       setAuthenticatedUI(false);
       show("Sesión cerrada", "success");
