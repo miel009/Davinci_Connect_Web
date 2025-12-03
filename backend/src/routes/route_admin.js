@@ -10,7 +10,8 @@ const router = express.Router();
 router.post("/verify", verifyAdminToken);
 
 // POST /api/admin/set-admin  (body: { email } or { uid })
-router.post('/set-admin', setAdminClaim);
+router.post("/set-admin", setAdminClaim);
+
 
 // DELETE /api/admin/comments/:id
 router.delete('/comments/:id', deleteComentario);

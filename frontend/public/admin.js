@@ -480,7 +480,7 @@
           return show(data.error || "No se pudo asignar administrador", "error");
         }
 
-        show(`Ahora ${data.name} (${data.email}) es administrador.`, "success");
+        show(`Ahora ${(data.name || "el usuario")} (${data.email}) es administrador.`, "success"); 
         setAdminForm.reset();
 
       } catch (err) {

@@ -14,7 +14,7 @@ export async function verifyAdminToken(req, res) {
 
     // Comprueba claim 'admin' o lista de emails en env ADMIN_EMAILS
     const isAdminClaim = !!decoded.admin;
-    const adminEmails = process.env.ADMIN_EMAILS ? process.env.ADMIN_EMAILS.split(",").map(s=>s.trim()) : [];
+    const adminEmails = process.env.ADMIN_EMAILS ? process.env.ADMIN_EMAILS.split(",").map(s => s.trim()) : [];
     const isAdminEmail = decoded.email && adminEmails.includes(decoded.email);
 
     if (isAdminClaim || isAdminEmail) {
@@ -31,69 +31,84 @@ export async function verifyAdminToken(req, res) {
 // Asigna custom claim 'admin' a un usuario (buscar por email o usar uid)
 export async function setAdminClaim(req, res) {
   try {
-    // Verifica que quien hace la petición ya sea admin
+    // token de pedticion
     const authHeader = req.headers.authorization || "";
-    if (!authHeader.startsWith("Bearer ")) 
+    if (!authHeader.startsWith("Bearer ")) {
       return res.status(401).json({ error: "No autorizado" });
+    }
 
     const idToken = authHeader.split(" ")[1];
     const decodedRequester = await admin.auth().verifyIdToken(idToken);
+    let existeAdmin = false;
+    let pageToken = undefined;
 
-    const adminEmails = process.env.ADMIN_EMAILS
-      ? process.env.ADMIN_EMAILS.split(',').map(s => s.trim())
-      : [];
+    do {
+      const result = await admin.auth().listUsers(1000, pageToken);
+      for (const u of result.users) {
+        if (u.customClaims && u.customClaims.admin) {
+          existeAdmin = true;
+          break;
+        }
+      }
+      pageToken = result.pageToken;
+    } while (pageToken && !existeAdmin);
 
-    if (!decodedRequester.admin && !(decodedRequester.email && adminEmails.includes(decodedRequester.email))) {
-      return res.status(403).json({ error: "No tienes permisos para asignar admin" });
+    if (existeAdmin && !decodedRequester.admin) {
+      return res
+        .status(403)
+        .json({ error: "No tienes permisos para asignar administradores" });
     }
 
+    // usuario objetivo (SIEMPRE debe ser de Auth)
     const { email, uid } = req.body;
     let targetUid = uid;
+    let targetEmail = email;
+    let targetName = "Administrador";
 
-    // Buscar usuario por email si no viene UID
     if (!targetUid && email) {
       try {
         const userRecord = await admin.auth().getUserByEmail(email);
         targetUid = userRecord.uid;
-
-        // devolver nombre y email
-        return res.json({
-          ok: true,
-          uid: userRecord.uid,
-          email: userRecord.email,
-          name: userRecord.displayName || "Usuario sin nombre"
-        });
-
+        targetEmail = userRecord.email;
+        targetName = userRecord.displayName || "Usuario sin nombre";
       } catch (error) {
         if (error.code === "auth/user-not-found") {
           return res.status(404).json({
-            error: "El usuario no existe. Verifica el email antes de asignar administrador."
+            error: "El usuario no existe en Firebase Auth.",
           });
         }
         throw error;
       }
     }
 
-    if (!targetUid)
-      return res.status(400).json({ error: "Debes proporcionar un email válido" });
+    if (!targetUid) {
+      return res
+        .status(400)
+        .json({ error: "Debes proporcionar un email de un usuario registrado" });
+    }
 
+    // asignar claim admin
     await admin.auth().setCustomUserClaims(targetUid, { admin: true });
+
+    const check = await admin.auth().getUser(targetUid);
+    console.log("✅ Claims actualizados:", check.customClaims);
 
     return res.json({
       ok: true,
       uid: targetUid,
-      email,
-      name: "Usuario actualizado"
+      email: targetEmail,
+      name: targetName,
+      message: existeAdmin
+        ? "Administrador asignado correctamente"
+        : "Primer administrador creado correctamente",
     });
-
   } catch (error) {
     console.error("Error asignando admin claim:", error);
     return res.status(500).json({
-      error: "Error interno del servidor al asignar administrador."
+      error: "Error interno del servidor al asignar administrador.",
     });
   }
 }
-
 
 // Eliminar comentario por id (protegido)
 export async function deleteComentario(req, res) {
@@ -103,7 +118,7 @@ export async function deleteComentario(req, res) {
     if (!authHeader.startsWith("Bearer ")) return res.status(401).send('No autorizado');
     const idToken = authHeader.split(' ')[1];
     const decodedRequester = await admin.auth().verifyIdToken(idToken);
-    const adminEmails = process.env.ADMIN_EMAILS ? process.env.ADMIN_EMAILS.split(',').map(s=>s.trim()) : [];
+    const adminEmails = process.env.ADMIN_EMAILS ? process.env.ADMIN_EMAILS.split(',').map(s => s.trim()) : [];
     if (!decodedRequester.admin && !(decodedRequester.email && adminEmails.includes(decodedRequester.email))) {
       return res.status(403).send('No tienes permisos para eliminar comentarios');
     }
@@ -126,7 +141,7 @@ export async function listUsers(req, res) {
     const idToken = authHeader.split(' ')[1];
 
     const decodedRequester = await admin.auth().verifyIdToken(idToken);
-    const adminEmails = process.env.ADMIN_EMAILS ? process.env.ADMIN_EMAILS.split(',').map(s=>s.trim()) : [];
+    const adminEmails = process.env.ADMIN_EMAILS ? process.env.ADMIN_EMAILS.split(',').map(s => s.trim()) : [];
     if (!decodedRequester.admin && !(decodedRequester.email && adminEmails.includes(decodedRequester.email))) {
       return res.status(403).json({ error: "No tienes permisos para listar usuarios" });
     }
@@ -185,7 +200,7 @@ export async function deleteUser(req, res) {
     const idToken = authHeader.split(' ')[1];
 
     const decodedRequester = await admin.auth().verifyIdToken(idToken);
-    const adminEmails = process.env.ADMIN_EMAILS ? process.env.ADMIN_EMAILS.split(',').map(s=>s.trim()) : [];
+    const adminEmails = process.env.ADMIN_EMAILS ? process.env.ADMIN_EMAILS.split(',').map(s => s.trim()) : [];
     if (!decodedRequester.admin && !(decodedRequester.email && adminEmails.includes(decodedRequester.email))) {
       return res.status(403).json({ error: "No tienes permisos para eliminar usuarios" });
     }
@@ -209,7 +224,7 @@ export async function listContents(req, res) {
     const idToken = authHeader.split(' ')[1];
 
     const decodedRequester = await admin.auth().verifyIdToken(idToken);
-    const adminEmails = process.env.ADMIN_EMAILS ? process.env.ADMIN_EMAILS.split(',').map(s=>s.trim()) : [];
+    const adminEmails = process.env.ADMIN_EMAILS ? process.env.ADMIN_EMAILS.split(',').map(s => s.trim()) : [];
     if (!decodedRequester.admin && !(decodedRequester.email && adminEmails.includes(decodedRequester.email))) {
       return res.status(403).json({ error: "No tienes permisos para listar contenidos" });
     }
@@ -237,13 +252,13 @@ export async function listContents(req, res) {
       const itemsAll = await Promise.all(allFiles.map(async (f) => {
         const meta = f.metadata || {};
         let url = null;
-          // Use public URL (files are made public on upload). If not public, access may 403.
-          try {
-            const bucketName = admin?.storage?.().bucket().name || process.env.FIREBASE_STORAGE_BUCKET;
-            url = `https://storage.googleapis.com/${bucketName}/${encodeURIComponent(f.name)}`;
-          } catch (e) {
-            url = null;
-          }
+        // Use public URL (files are made public on upload). If not public, access may 403.
+        try {
+          const bucketName = admin?.storage?.().bucket().name || process.env.FIREBASE_STORAGE_BUCKET;
+          url = `https://storage.googleapis.com/${bucketName}/${encodeURIComponent(f.name)}`;
+        } catch (e) {
+          url = null;
+        }
         return {
           name: f.name,
           size: meta.size || null,
@@ -321,7 +336,7 @@ export async function uploadContent(req, res) {
     const idToken = authHeader.split(' ')[1];
 
     const decodedRequester = await admin.auth().verifyIdToken(idToken);
-    const adminEmails = process.env.ADMIN_EMAILS ? process.env.ADMIN_EMAILS.split(',').map(s=>s.trim()) : [];
+    const adminEmails = process.env.ADMIN_EMAILS ? process.env.ADMIN_EMAILS.split(',').map(s => s.trim()) : [];
     if (!decodedRequester.admin && !(decodedRequester.email && adminEmails.includes(decodedRequester.email))) {
       return res.status(403).json({ error: "No tienes permisos para subir contenidos" });
     }
@@ -344,7 +359,7 @@ export async function uploadContent(req, res) {
         // stream upload from local temp file
         await bucket.upload(req.file.path, { destination: destName, metadata: { contentType: req.file.mimetype } });
         // remove temp file
-        try { await fs.unlink(req.file.path); } catch (e) {}
+        try { await fs.unlink(req.file.path); } catch (e) { }
       } else if (req.file && req.file.buffer) {
         const fileRef = bucket.file(destName);
         await fileRef.save(req.file.buffer, { metadata: { contentType: req.file.mimetype } });
@@ -365,7 +380,7 @@ export async function uploadContent(req, res) {
     } catch (error) {
       console.error('Error uploadContent:', error);
       // cleanup temp file if present
-      try { if (req.file && req.file.path) await fs.unlink(req.file.path); } catch (e) {}
+      try { if (req.file && req.file.path) await fs.unlink(req.file.path); } catch (e) { }
       return res.status(500).json({ error: 'Error subiendo contenido' });
     }
   } catch (error) {
@@ -382,7 +397,7 @@ export async function deleteContent(req, res) {
     const idToken = authHeader.split(' ')[1];
 
     const decodedRequester = await admin.auth().verifyIdToken(idToken);
-    const adminEmails = process.env.ADMIN_EMAILS ? process.env.ADMIN_EMAILS.split(',').map(s=>s.trim()) : [];
+    const adminEmails = process.env.ADMIN_EMAILS ? process.env.ADMIN_EMAILS.split(',').map(s => s.trim()) : [];
     if (!decodedRequester.admin && !(decodedRequester.email && adminEmails.includes(decodedRequester.email))) {
       return res.status(403).json({ error: "No tienes permisos para eliminar contenidos" });
     }
