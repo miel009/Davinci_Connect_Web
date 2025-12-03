@@ -33,6 +33,15 @@ frontend/dist/
 /backend/serviceAccountKey.json
 functions/.runtimeconfig.json
 functions/.runtimeconfig.json
+/backend/firebase-key.json
+/backend/*.credentials.json
+functions/.runtimeconfig.json
+.env
+.env.local
+.env.*.local
+
+# variables del backend
+/backend/.env
 
 .vercel
 .output

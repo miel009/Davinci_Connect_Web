@@ -1,6 +1,5 @@
 import { admin, db } from "../firebase.js";
 import fs from "node:fs/promises";
-
 // Verifica ID token enviado en Authorization: Bearer <token>
 export async function verifyAdminToken(req, res) {
   try {
@@ -415,3 +414,129 @@ export async function deleteContent(req, res) {
     return res.status(500).json({ error: 'Error eliminando contenido' });
   }
 }
+
+export async function listUsersWithPending(req, res) {
+  try {
+    const all = await admin.auth().listUsers(1000);
+
+    const snapshot = await admin.firestore().collection("acceptedUsers").get();
+    const aceptados = new Set(snapshot.docs.map(d => d.id));
+
+    const pendientes = [];
+    const aceptadosList = [];
+
+    for (const u of all.users) {
+      if (aceptados.has(u.uid)) {
+        aceptadosList.push({
+          uid: u.uid,
+          email: u.email,
+          admin: u.customClaims?.admin || false,
+          lastSignInTime: u.metadata?.lastSignInTime || null
+        });
+      } else {
+        pendientes.push({
+          uid: u.uid,
+          email: u.email
+        });
+      }
+    }
+
+    res.json({
+      pendientes,
+      aceptados: aceptadosList,
+      todos: all.users
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Error listando usuarios" });
+  }
+}
+
+
+export async function aceptarUser(req, res) {
+  try {
+    // Verificar token admin
+    const authHeader = req.headers.authorization || "";
+    if (!authHeader.startsWith("Bearer ")) 
+      return res.status(401).json({ error: "No autorizado" });
+
+    const idToken = authHeader.split(" ")[1];
+    const decoded = await admin.auth().verifyIdToken(idToken);
+
+    const adminEmails = process.env.ADMIN_EMAILS
+      ? process.env.ADMIN_EMAILS.split(",").map(s => s.trim())
+      : [];
+
+    if (!decoded.admin && !(decoded.email && adminEmails.includes(decoded.email))) {
+      return res.status(403).json({ error: "No tienes permisos para aceptar usuarios" });
+    }
+
+    // UID real enviado desde admin.js
+    const { uid } = req.body;
+    if (!uid) return res.status(400).json({ error: "Falta UID" });
+
+    // Obtener usuario real
+    const userRecord = await admin.auth().getUser(uid);
+    const email = userRecord.email || "";
+
+    // Asignar rol alumno
+    await admin.auth().setCustomUserClaims(uid, { alumno: true });
+
+    // Guardar aceptación
+    await admin.firestore()
+      .collection("acceptedUsers")
+      .doc(uid)
+      .set({
+        email,
+        rol: "alumno",
+        fechaAceptado: admin.firestore.FieldValue.serverTimestamp()
+      });
+
+    return res.json({ ok: true, message: "Usuario aceptado correctamente" });
+
+  } catch (err) {
+    console.error("ERROR aceptarUser:", err);
+    res.status(500).json({ error: "Error aceptando usuario" });
+  }
+}
+
+
+
+export async function rechazarUser(req, res) {
+  try {
+    const authHeader = req.headers.authorization || "";
+    if (!authHeader.startsWith("Bearer "))
+      return res.status(401).json({ error: "No autorizado" });
+
+    const idToken = authHeader.split(" ")[1];
+    const decoded = await admin.auth().verifyIdToken(idToken);
+
+    const adminEmails = process.env.ADMIN_EMAILS
+      ? process.env.ADMIN_EMAILS.split(",").map(s => s.trim())
+      : [];
+
+    if (!decoded.admin && !(decoded.email && adminEmails.includes(decoded.email))) {
+      return res.status(403).json({ error: "No tienes permisos" });
+    }
+
+    const { uid } = req.params;
+    if (!uid) return res.status(400).json({ error: "Falta UID" });
+
+    // Marcar como rechazado
+    await admin.firestore().collection("rechazados").doc(uid).set({
+      estado: "rechazado",
+      fecha: admin.firestore.FieldValue.serverTimestamp()
+    });
+
+    // ELIMINAR al usuario de Firebase Auth (esto faltaba)
+    await admin.auth().deleteUser(uid);
+
+    return res.json({ ok: true, message: "Usuario rechazado y eliminado" });
+
+  } catch (err) {
+    console.error("ERROR rechazarUser:", err);
+    res.status(500).json({ error: "Error rechazando usuario" });
+  }
+}
+

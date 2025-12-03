@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,6 +8,7 @@
   <link rel="stylesheet" href="/styles.css">
   <link rel="icon" type="image/png" href="img/Logo2.png">
 </head>
+
 <body>
   <header class="navbar">
     <div class="logo">DaVinci<span>Connect</span></div>
@@ -19,30 +21,36 @@
 
   <main style="padding:140px 30px 60px; text-align:center;">
     <h1 style="color:#a445ff;">Panel de Administración</h1>
-    <p style="color:#ccc; max-width:900px; margin: 0 auto 30px;">Has accedido al área de administración. Aquí se mostrará el ABM para modificar las colecciones de Firebase de DaVinci Connect.</p>
+    <p style="color:#ccc; max-width:900px; margin: 0 auto 30px;">Has accedido al área de administración. Aquí se
+      mostrará el ABM para modificar las colecciones de Firebase de DaVinci Connect.</p>
 
     <div style="display:flex; gap:18px; justify-content:center; flex-wrap:wrap; margin-bottom:30px;">
       <button class="btn" onclick="showSection('usuarios')">Usuarios</button>
       <button class="btn" onclick="showSection('comentarios')">Comentarios</button>
       <button class="btn" onclick="showSection('contenidos')">Contenidos</button>
       <button class="btn" onclick="showSection('configuracion')">Configuración</button>
+      <button class="btn" onclick="showSection('solicitudes')">Solicitudes</button>
+
     </div>
 
     <!-- Herramientas rápidas admin -->
-    <section style="max-width:900px; margin: 28px auto 80px; text-align:left; color:#ddd; background: rgba(10,10,10,0.6); padding:18px; border-radius:10px;">
+    <section
+      style="max-width:900px; margin: 28px auto 80px; text-align:left; color:#ddd; background: rgba(10,10,10,0.6); padding:18px; border-radius:10px;">
       <h3 style="color:#a445ff;">Herramientas Rápidas</h3>
       <p id="adminMessage" style="color:#ccc"></p>
 
       <!-- Login / estado usuario -->
-       <div id="adminAuth" style="margin-bottom:18px;">
+      <div id="adminAuth" style="margin-bottom:18px;">
         <form id="adminLoginFormLocal" style="display:flex; gap:8px; align-items:center;">
           <input id="adminLocalEmail" type="email" placeholder="admin@dominio.com"
-                 style="padding:8px; border-radius:8px; border:none; background:rgba(255,255,255,0.03); color:#fff;" required />
+            style="padding:8px; border-radius:8px; border:none; background:rgba(255,255,255,0.03); color:#fff;"
+            required />
           <input id="adminLocalPassword" type="password" placeholder="Contraseña"
-                 style="padding:8px; border-radius:8px; border:none; background:rgba(255,255,255,0.03); color:#fff;" required />
+            style="padding:8px; border-radius:8px; border:none; background:rgba(255,255,255,0.03); color:#fff;"
+            required />
           <button class="btn" type="submit">Iniciar sesión</button>
           <button id="sendResetEmailBtn" type="button" class="btn"
-                  style="background:transparent; border:1px solid rgba(255,255,255,0.06);">
+            style="background:transparent; border:1px solid rgba(255,255,255,0.06);">
             Enviar restablecimiento
           </button>
         </form>
@@ -50,8 +58,7 @@
 
       <div id="adminUserInfo" style="display:none; margin-bottom:18px;">
         <span id="adminUserEmail" style="color:#ccc; margin-right:12px;"></span>
-        <button id="adminSignOut" class="btn"
-                style="background:transparent; border:1px solid rgba(255,255,255,0.06);">
+        <button id="adminSignOut" class="btn" style="background:transparent; border:1px solid rgba(255,255,255,0.06);">
           Cerrar sesión
         </button>
       </div>
@@ -60,14 +67,13 @@
         <h4 style="color:#ddd">Asignar rol administrador</h4>
         <form id="setAdminForm" style="display:flex; gap:8px; align-items:center;">
           <input id="makeAdminEmail" type="email" placeholder="email@dominio.com"
-                 style="padding:8px; border-radius:8px; border:none; background:rgba(255,255,255,0.03); color:#fff;" />
+            style="padding:8px; border-radius:8px; border:none; background:rgba(255,255,255,0.03); color:#fff;" />
           <button class="btn" type="submit">Asignar Admin</button>
         </form>
       </div>
 
       <!-- 🔵 SECCIÓN COMENTARIOS (ya existía) -->
-      <div id="adminComments" class="admin-section"
-           style="background:transparent; border-radius:8px; overflow:hidden;">
+      <div id="adminComments" class="admin-section" style="background:transparent; border-radius:8px; overflow:hidden;">
         Cargando comentarios...
       </div>
 
@@ -79,13 +85,22 @@
         </div>
       </div>
 
+      <div id="adminSolicitudes" class="admin-section" style="display:none; margin-top:20px;">
+        <h4 style="color:#a445ff;">Solicitudes de Usuarios</h4>
+        <div id="adminSolicitudesList" style="margin-top:10px; color:#ddd;">
+          Cargando solicitudes...
+        </div>
+      </div>
+
+
       <!-- 🔵 OPCIONAL: placeholders para futuras secciones -->
       <div id="adminContents" class="admin-section" style="display:none; margin-top:20px;">
         <h4 style="color:#a445ff;">Contenidos</h4>
 
         <div style="margin-top:8px; color:#ddd; display:flex; gap:8px; align-items:center;">
           <form id="contentFilterForm" style="display:flex; gap:8px; align-items:center;">
-            <input id="contentFilterInput" type="text" placeholder="Filtrar por carpeta/prefix (p.ej. images/)" style="padding:8px; border-radius:8px; border:none; width:260px; background:rgba(255,255,255,0.03); color:#fff;" />
+            <input id="contentFilterInput" type="text" placeholder="Filtrar por carpeta/prefix (p.ej. images/)"
+              style="padding:8px; border-radius:8px; border:none; width:260px; background:rgba(255,255,255,0.03); color:#fff;" />
             <button class="btn" type="submit">Filtrar</button>
             <button id="clearFilterBtn" class="btn" type="button" style="background:transparent;">Limpiar</button>
           </form>
@@ -94,7 +109,8 @@
         <div style="margin-top:8px; color:#ddd;">
           <form id="uploadContentForm" style="display:flex; gap:8px; align-items:center;">
             <input id="contentFileInput" type="file" />
-            <input id="contentPathInput" type="text" placeholder="(opcional) carpeta/path" style="padding:8px; border-radius:8px; border:none; background:rgba(255,255,255,0.03); color:#fff;" />
+            <input id="contentPathInput" type="text" placeholder="(opcional) carpeta/path"
+              style="padding:8px; border-radius:8px; border:none; background:rgba(255,255,255,0.03); color:#fff;" />
             <button class="btn" type="submit">Subir</button>
           </form>
         </div>
@@ -113,13 +129,16 @@
     </section>
   </main>
 
-  <footer style="position:fixed; bottom:0; width:100%; text-align:center; background:#0a0a0a; padding:18px; color:#aaa;">© 2025 DaVinci Connect. Todos los derechos reservados.</footer>
+  <footer
+    style="position:fixed; bottom:0; width:100%; text-align:center; background:#0a0a0a; padding:18px; color:#aaa;">©
+    2025 DaVinci Connect. Todos los derechos reservados.</footer>
   <!-- Firebase compat SDKs (client) -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
-<script src="/firebase-client.js"></script>
-<script src="/admin.js"></script>
+  <script src="/firebase-client.js"></script>
+  <script src="/admin.js"></script>
 
 </body>
+
 </html>
