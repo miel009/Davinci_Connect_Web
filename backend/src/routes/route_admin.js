@@ -1,21 +1,39 @@
 import express from "express";
 import multer from "multer";
 import os from "os";
-import {verifyAdminToken,setAdminClaim,deleteComentari,listUsers,deleteUser,listContents,uploadContent,deleteContent,listUsersWithPending,aceptarUser,rechazarUser
+
+import {
+  verifyAdminToken,
+  setAdminClaim,
+  deleteComentario,
+  listUsers,
+  deleteUser,
+  listContents,
+  uploadContent,
+  deleteContent,
+  listUsersWithPending,
+  aceptarUser,
+  rechazarUser
 } from "../controllers/controller_admin.js";
 
 import { db } from "../firebase.js";
 
 const router = express.Router();
 
+// RUTAS ADMIN
 router.post("/verify", verifyAdminToken);
 router.post("/set-admin", setAdminClaim);
+
+// SOLICITUDES
 router.get("/solicitudes", listUsersWithPending);
+router.post("/aceptar-user", aceptarUser);      // ⬅ AGREGADO
 router.delete("/rechazar-user/:uid", rechazarUser);
+
+// USUARIOS
 router.get("/users", listUsers);
 router.delete("/users/:uid", deleteUser);
 
-// GET — Listar comentarios (lo usa el panel admin)
+// COMENTARIOS
 router.get("/comentarios", async (req, res) => {
   try {
     const snap = await db.collection("comentarios")
@@ -35,9 +53,9 @@ router.get("/comentarios", async (req, res) => {
   }
 });
 
-// DELETE — eliminar comentario (requiere admin)
 router.delete("/comments/:id", deleteComentario);
 
+// SUBIDA DE ARCHIVOS
 const upload = multer({
   storage: multer.diskStorage({
     destination: (req, file, cb) => cb(null, os.tmpdir()),
@@ -50,6 +68,5 @@ const upload = multer({
 router.get("/contents", listContents);
 router.post("/contents", upload.single("file"), uploadContent);
 router.delete("/contents/:name", deleteContent);
-
 
 export default router;
