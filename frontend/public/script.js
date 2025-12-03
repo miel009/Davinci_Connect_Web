@@ -32,9 +32,9 @@ form.addEventListener("submit", async (e) => {
     form.reset();
     cargarComentarios();
     // ocultar notificacion dsp de 5 segundos
-  setTimeout(() => {
-    respuesta.innerText = "";
-  }, 5000);
+    setTimeout(() => {
+      respuesta.innerText = "";
+    }, 5000);
 
   } catch (error) {
     console.error("Error:", error);
@@ -78,14 +78,14 @@ setInterval(() => {
   posicion += anchoCard;
 
   if (posicion + listaComentarios.clientWidth > listaComentarios.scrollWidth) {
-    posicion = 0; 
+    posicion = 0;
   }
 
   listaComentarios.scrollTo({ left: posicion, behavior: "smooth" });
 }, 3000);
 
 window.addEventListener("DOMContentLoaded", cargarComentarios);
-setInterval(cargarComentarios, 6000);  
+setInterval(cargarComentarios, 6000);
 
 
 // --- Lógica para modal de administración (abrir / cerrar / login simulado)
@@ -129,7 +129,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const { token } = await window.__davinciFirebase.signIn(email, pwd);
 
         // Verificar token en backend
-        const verifyRes = await fetch('/api/admin/verify', {
+        const API_BASE = window.location.hostname.includes("localhost")
+          ? "http://localhost:4000"
+          : "https://davinci-connect-web.onrender.com";
+
+        const verifyRes = await fetch(API_BASE + '/api/admin/verify', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -138,11 +142,12 @@ document.addEventListener("DOMContentLoaded", () => {
           body: JSON.stringify({})
         });
 
+
         if (!verifyRes.ok) {
           const txt = await verifyRes.text().catch(() => 'No autorizado');
           adminError.style.display = 'block';
           adminError.innerText = 'Acceso denegado: ' + txt;
-          try { await window.__davinciFirebase.signOut(); } catch(e){
+          try { await window.__davinciFirebase.signOut(); } catch (e) {
             console.error(e);
           }
           return;
