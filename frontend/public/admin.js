@@ -162,7 +162,7 @@
   };
 
   // ACEPTAR USUARIO
-  window.aceptarUsuario = async function(uid, email) {
+  window.aceptarUsuario = async function (uid, email) {
     const token = await getToken();
     if (!token) return show("No autenticado", "error");
 
@@ -190,8 +190,8 @@
     }
   };
 
- 
-  window.rechazarUsuario = async function(uid) {
+
+  window.rechazarUsuario = async function (uid) {
     const token = await getToken();
     if (!token) return show("No autenticado", "error");
 
@@ -370,7 +370,7 @@
       if (!res.ok) {
         setAuthenticatedUI(false);
         show("Acceso denegado: no eres administrador", "error");
-        try { await window.__davinciFirebase.signOut(); } catch {};
+        try { await window.__davinciFirebase.signOut(); } catch { };
         return;
       }
 
@@ -404,7 +404,7 @@
 
   if (adminSignOutBtn) {
     adminSignOutBtn.addEventListener("click", async () => {
-      try { await window.__davinciFirebase.signOut(); } catch {};
+      try { await window.__davinciFirebase.signOut(); } catch { };
       setAuthenticatedUI(false);
       show("Sesión cerrada", "success");
     });
