@@ -456,9 +456,8 @@ export async function listUsersWithPending(req, res) {
 
 export async function aceptarUser(req, res) {
   try {
-    // Verificar token admin
     const authHeader = req.headers.authorization || "";
-    if (!authHeader.startsWith("Bearer ")) 
+    if (!authHeader.startsWith("Bearer "))
       return res.status(401).json({ error: "No autorizado" });
 
     const idToken = authHeader.split(" ")[1];
@@ -472,26 +471,39 @@ export async function aceptarUser(req, res) {
       return res.status(403).json({ error: "No tienes permisos para aceptar usuarios" });
     }
 
-    // UID real enviado desde admin.js
     const { uid } = req.body;
     if (!uid) return res.status(400).json({ error: "Falta UID" });
 
-    // Obtener usuario real
     const userRecord = await admin.auth().getUser(uid);
     const email = userRecord.email || "";
 
-    // Asignar rol alumno
-    await admin.auth().setCustomUserClaims(uid, { alumno: true });
+    // ✅ 1) (Opcional) claim - podés mantenerlo
+    await admin.auth().setCustomUserClaims(uid, {
+      ...(userRecord.customClaims || {}),
+      alumno: true,
+      approved: true,       // ✅ opcional si querés usar claims luego
+    });
 
-    // Guardar aceptación
-    await admin.firestore()
-      .collection("acceptedUsers")
-      .doc(uid)
-      .set({
-        email,
-        rol: "alumno",
-        fechaAceptado: admin.firestore.FieldValue.serverTimestamp()
-      });
+    const fsdb = admin.firestore();
+
+    // ✅ 2) Lo MÁS importante: actualizar users/{uid}
+    await fsdb.collection("users").doc(uid).set({
+      approved: true,
+      status: "approved",
+      approvedAt: admin.firestore.FieldValue.serverTimestamp(),
+      email
+    }, { merge: true });
+
+    // ✅ 3) Mantener acceptedUsers si querés historial
+    await fsdb.collection("acceptedUsers").doc(uid).set({
+      email,
+      rol: "alumno",
+      status: "approved",
+      fechaAceptado: admin.firestore.FieldValue.serverTimestamp()
+    }, { merge: true });
+
+    // ✅ 4) Borrar solicitud (si estás usando colección solicitudes)
+    await fsdb.collection("solicitudes").doc(uid).delete().catch(() => {});
 
     return res.json({ ok: true, message: "Usuario aceptado correctamente" });
 
